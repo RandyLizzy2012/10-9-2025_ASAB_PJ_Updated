@@ -807,11 +807,7 @@ const Home = () => {
     
     // Debug logging for each trending item
     if (__DEV__) {
-      console.log(`Rendering trending item ${index}:`, {
-        id: item.$id,
-        thumbnail: item.thumbnail,
-        title: item.title
-      });
+     
     }
     
     return (
@@ -932,29 +928,52 @@ const Home = () => {
             }}>
               {/* Welcome Back and Username */}
               <View style={{ paddingHorizontal: 20, marginBottom: 20 }}>
-                <Text style={{ 
-                  color: '#ccc', 
-                  fontSize: 14, 
-                  marginBottom: 5 
-                }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ 
+                      color: '#ccc', 
+                      fontSize: 14, 
+                      marginBottom: 5 
+                    }}>
 
-                 <View className="mt-6">
-                <Image
-                  source={images.ASAB4}
-                  className="w-22 h-24
-                   justify-center right-10"
-                  />
-              </View>
-              
-                  Welcome Back
-                </Text>
-                <Text style={{ 
-                  color: '#fff', 
-                  fontSize: 24, 
-                  fontWeight: 'bold' 
-                }}>
-                  {user?.username || 'jsmastery'}
-                </Text>
+                     <View className="mt-6">
+                    <Image
+                      source={images.ASAB4}
+                      className="w-22 h-24
+                       justify-center right-10"
+                      />
+                  </View>
+                  
+                      Welcome Back
+                    </Text>
+                    <Text style={{ 
+                      color: '#fff', 
+                      fontSize: 24, 
+                      fontWeight: 'bold' 
+                    }}>
+                      {user?.username || 'jsmastery'}
+                    </Text>
+                  </View>
+
+                  {/* Go Live Button */}
+                  <TouchableOpacity
+                    onPress={() => router.push('/go-live')}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      backgroundColor: '#ff4757',
+                      paddingHorizontal: 15,
+                      paddingVertical: 10,
+                      borderRadius: 20,
+                      marginTop: 10,
+                    }}
+                  >
+                    <Text style={{ fontSize: 16, marginRight: 5 }}>📹</Text>
+                    <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold' }}>
+                      Go Live
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
 
               {/* Search Bar */}

@@ -15,6 +15,10 @@ const TabIcon = ({ name, color, focused }) => {
       iconName = 'home';
       label = 'Home';
       break;
+    case 'Live':
+      iconName = 'video';
+      label = 'Live';
+      break;
     case 'Friends':
       iconName = 'users';
       label = 'Friends';
@@ -79,6 +83,20 @@ const TabLayout = () => {
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 name="Home"
+                color={color}
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="live-streams"
+          options={{
+            title: "Live",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                name="Live"
                 color={color}
                 focused={focused}
               />
@@ -157,6 +175,14 @@ const TabLayout = () => {
           name="donation"
           options={{
             title: "Donation",
+            headerShown: false,
+            href: null, // Hide from tab bar
+          }}
+        />
+        <Tabs.Screen
+          name="go-live"
+          options={{
+            title: "Go Live",
             headerShown: false,
             href: null, // Hide from tab bar
           }}
