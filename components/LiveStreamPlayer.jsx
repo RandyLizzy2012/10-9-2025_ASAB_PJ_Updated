@@ -3,6 +3,14 @@ import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, ScrollView
 import { Video, ResizeMode } from 'expo-av';
 import { useGlobalContext } from '../context/GlobalProvider';
 import { joinLiveStream, leaveLiveStream, subscribeLiveStreamUpdates, followStreamer, unfollowStreamer, isFollowing, getFollowerCount } from '../lib/livestream';
+import { 
+  initializeAgora, 
+  startViewing, 
+  stopStreaming, 
+  destroyEngine, 
+  generateChannelName, 
+  generateUserId 
+} from '../lib/agora';
 
 const { width, height } = Dimensions.get('window');
 
@@ -15,6 +23,8 @@ const LiveStreamPlayer = ({ stream, onClose }) => {
   const [selectedQuality, setSelectedQuality] = useState('auto');
   const [isFollowingUser, setIsFollowingUser] = useState(false);
   const [followerCount, setFollowerCount] = useState(0);
+  const [agoraClient, setAgoraClient] = useState(null);
+  const [isAgoraConnected, setIsAgoraConnected] = useState(false);
 
   const qualityOptions = [
     { label: 'Auto', value: 'auto' },
@@ -27,9 +37,34 @@ const LiveStreamPlayer = ({ stream, onClose }) => {
     let durationInterval;
     let unsubscribe;
 
+    // Initialize Agora and start viewing
+    const initializeViewing = async () => {
+      try {
+        console.log('👀 Initializing Agora for live viewing...');
+        const client = await initializeAgora();
+        setAgoraClient(client);
+        
+        const channelName = generateChannelName(stream.$id);
+        const userId = generateUserId();
+        
+        console.log('📺 Starting viewing on channel:', channelName);
+        await startViewing(client, channelName, userId);
+        setIsAgoraConnected(true);
+        setIsBuffering(false);
+        
+        console.log('✅ Live viewing started successfully!');
+      } catch (error) {
+        console.error('❌ Failed to start live viewing:', error);
+        Alert.alert('Viewing Error', 'Failed to connect to live stream. Please try again.');
+      }
+    };
+
     // Join the stream
     if (user?.$id && stream?.$id) {
       joinLiveStream(stream.$id, user.$id).catch(console.error);
+
+      // Initialize Agora viewing
+      initializeViewing();
 
       // Check follow status
       if (stream.hostId && user.$id !== stream.hostId) {
@@ -64,6 +99,14 @@ const LiveStreamPlayer = ({ stream, onClose }) => {
     }
 
     return () => {
+      // Stop Agora viewing
+      if (agoraClient && isAgoraConnected) {
+        console.log('🛑 Stopping Agora viewing...');
+        stopStreaming(agoraClient).catch(console.error);
+        destroyEngine(agoraClient).catch(console.error);
+        console.log('✅ Agora viewing stopped');
+      }
+
       // Leave the stream
       if (user?.$id && stream?.$id) {
         leaveLiveStream(stream.$id, user.$id).catch(console.error);

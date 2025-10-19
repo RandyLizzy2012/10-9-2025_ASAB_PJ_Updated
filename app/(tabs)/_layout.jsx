@@ -90,20 +90,6 @@ const TabLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="live-streams"
-          options={{
-            title: "Live",
-            headerShown: false,
-            tabBarIcon: ({ color, focused }) => (
-              <TabIcon
-                name="Live"
-                color={color}
-                focused={focused}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
           name="friends"
           options={{
             title: "Friends",

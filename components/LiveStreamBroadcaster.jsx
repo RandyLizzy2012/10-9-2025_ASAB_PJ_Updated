@@ -4,6 +4,14 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useGlobalContext } from '../context/GlobalProvider';
 import { endLiveStream } from '../lib/livestream';
 import { router } from 'expo-router';
+import { 
+  initializeAgora, 
+  startBroadcasting, 
+  stopStreaming, 
+  destroyEngine, 
+  generateChannelName, 
+  generateUserId 
+} from '../lib/agora';
 
 const { width, height } = Dimensions.get('window');
 
@@ -13,11 +21,38 @@ const LiveStreamBroadcaster = ({ streamId, onStreamEnd }) => {
   const [flash, setFlash] = useState('off');
   const [isStreaming, setIsStreaming] = useState(true);
   const [duration, setDuration] = useState(0);
+  const [agoraClient, setAgoraClient] = useState(null);
+  const [agoraTracks, setAgoraTracks] = useState(null);
+  const [isAgoraConnected, setIsAgoraConnected] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef(null);
   const durationIntervalRef = useRef(null);
 
   useEffect(() => {
+    // Initialize Agora and start broadcasting
+    const initializeStreaming = async () => {
+      try {
+        console.log('🎥 Initializing Agora for live streaming...');
+        const client = await initializeAgora();
+        setAgoraClient(client);
+        
+        const channelName = generateChannelName(streamId);
+        const userId = generateUserId();
+        
+        console.log('📡 Starting broadcast on channel:', channelName);
+        const result = await startBroadcasting(client, channelName, userId);
+        setAgoraTracks(result);
+        setIsAgoraConnected(true);
+        
+        console.log('✅ Live streaming started successfully!');
+      } catch (error) {
+        console.error('❌ Failed to start live streaming:', error);
+        Alert.alert('Streaming Error', 'Failed to start live streaming. Please try again.');
+      }
+    };
+
+    initializeStreaming();
+
     // Start duration counter
     durationIntervalRef.current = setInterval(() => {
       setDuration(prev => prev + 1);
@@ -28,7 +63,7 @@ const LiveStreamBroadcaster = ({ streamId, onStreamEnd }) => {
         clearInterval(durationIntervalRef.current);
       }
     };
-  }, []);
+  }, [streamId]);
 
   if (!permission) {
     return <View style={styles.container}><Text style={styles.text}>Requesting camera permission...</Text></View>;
@@ -68,7 +103,19 @@ const LiveStreamBroadcaster = ({ streamId, onStreamEnd }) => {
               if (durationIntervalRef.current) {
                 clearInterval(durationIntervalRef.current);
               }
+
+              // Stop Agora streaming
+              if (agoraClient && isAgoraConnected) {
+                console.log('🛑 Stopping Agora streaming...');
+                await stopStreaming(agoraClient, agoraTracks);
+                await destroyEngine(agoraClient);
+                setIsAgoraConnected(false);
+                console.log('✅ Agora streaming stopped');
+              }
+
+              // Update database
               await endLiveStream(streamId);
+              
               if (onStreamEnd) {
                 onStreamEnd();
               }

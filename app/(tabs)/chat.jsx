@@ -1507,50 +1507,53 @@ const Chat = () => {
                   backgroundColor: '#232533',
                   borderRadius: 16,
                   padding: 16,
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  justifyContent: 'space-between',
                   zIndex: 100,
                   shadowColor: '#000',
                   shadowOpacity: 0.2,
                   shadowRadius: 8,
                 }}>
-                  <View style={{ alignItems: 'center', width: '30%', marginBottom: 16 }}>
-                    <TouchableOpacity onPress={handleCameraPress}>
-                      <MaterialCommunityIcons name="camera" size={32} color="#a259f7" />
-                    </TouchableOpacity>
-                    <Text style={{ color: '#fff', marginTop: 6, fontSize: 13 }}>Camera</Text>
-                  </View>
-                  <View style={{ alignItems: 'center', width: '30%', marginBottom: 16 }}>
-                    <TouchableOpacity onPress={handleRecordPress}>
-                      <MaterialCommunityIcons name="microphone" size={32} color="#a259f7" />
-                    </TouchableOpacity>
-                    <Text style={{ color: '#fff', marginTop: 6, fontSize: 13 }}>Audio</Text>
-                  </View>
-                  <View style={{ alignItems: 'center', width: '30%', marginBottom: 16 }}>
-                    <TouchableOpacity onPress={handleContactPress}>
-                      <MaterialCommunityIcons name="account-box" size={32} color="#a259f7" />
-                    </TouchableOpacity>
-                    <Text style={{ color: '#fff', marginTop: 6, fontSize: 13 }}>Contact</Text>
-                  </View>
-                  <View style={{ alignItems: 'center', width: '30%', marginBottom: 16 }}>
-                    <TouchableOpacity onPress={handleGalleryPress}>
-                      <MaterialCommunityIcons name="image" size={32} color="#a259f7" />
-                    </TouchableOpacity>
-                    <Text style={{ color: '#fff', marginTop: 6, fontSize: 13 }}>Gallery</Text>
-                  </View>
-                  <View style={{ alignItems: 'center', width: '30%', marginBottom: 16 }}>
-                    <TouchableOpacity onPress={handleLocationPress}>
-                      <MaterialCommunityIcons name="map-marker" size={32} color="#a259f7" />
-                    </TouchableOpacity>
-                    <Text style={{ color: '#fff', marginTop: 6, fontSize: 13 }}>Location</Text>
-                  </View>
-                  <View style={{ alignItems: 'center', width: '30%', marginBottom: 16 }}>
-                    <TouchableOpacity onPress={handleDocumentPress}>
-                      <MaterialCommunityIcons name="file-document" size={32} color="#a259f7" />
-                    </TouchableOpacity>
-                    <Text style={{ color: '#fff', marginTop: 6, fontSize: 13 }}>Document</Text>
-                  </View>
+                  <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{ paddingHorizontal: 8 }}
+                  >
+                    <View style={{ alignItems: 'center', width: 80, marginRight: 16 }}>
+                      <TouchableOpacity onPress={handleCameraPress}>
+                        <MaterialCommunityIcons name="camera" size={32} color="#a259f7" />
+                      </TouchableOpacity>
+                      <Text style={{ color: '#fff', marginTop: 6, fontSize: 13, textAlign: 'center' }}>Camera</Text>
+                    </View>
+                    <View style={{ alignItems: 'center', width: 80, marginRight: 16 }}>
+                      <TouchableOpacity onPress={handleRecordPress}>
+                        <MaterialCommunityIcons name="microphone" size={32} color="#a259f7" />
+                      </TouchableOpacity>
+                      <Text style={{ color: '#fff', marginTop: 6, fontSize: 13, textAlign: 'center' }}>Audio</Text>
+                    </View>
+                    <View style={{ alignItems: 'center', width: 80, marginRight: 16 }}>
+                      <TouchableOpacity onPress={handleContactPress}>
+                        <MaterialCommunityIcons name="account-box" size={32} color="#a259f7" />
+                      </TouchableOpacity>
+                      <Text style={{ color: '#fff', marginTop: 6, fontSize: 13, textAlign: 'center' }}>Contact</Text>
+                    </View>
+                    <View style={{ alignItems: 'center', width: 80, marginRight: 16 }}>
+                      <TouchableOpacity onPress={handleGalleryPress}>
+                        <MaterialCommunityIcons name="image" size={32} color="#a259f7" />
+                      </TouchableOpacity>
+                      <Text style={{ color: '#fff', marginTop: 6, fontSize: 13, textAlign: 'center' }}>Gallery</Text>
+                    </View>
+                    <View style={{ alignItems: 'center', width: 80, marginRight: 16 }}>
+                      <TouchableOpacity onPress={handleLocationPress}>
+                        <MaterialCommunityIcons name="map-marker" size={32} color="#a259f7" />
+                      </TouchableOpacity>
+                      <Text style={{ color: '#fff', marginTop: 6, fontSize: 13, textAlign: 'center' }}>Location</Text>
+                    </View>
+                    <View style={{ alignItems: 'center', width: 80, marginRight: 16 }}>
+                      <TouchableOpacity onPress={handleDocumentPress}>
+                        <MaterialCommunityIcons name="file-document" size={32} color="#a259f7" />
+                      </TouchableOpacity>
+                      <Text style={{ color: '#fff', marginTop: 6, fontSize: 13, textAlign: 'center' }}>Document</Text>
+                    </View>
+                  </ScrollView>
                 </View>
               )}
               <TextInput

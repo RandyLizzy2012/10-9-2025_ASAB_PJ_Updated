@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, RefreshContr
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useGlobalContext } from '../../context/GlobalProvider';
-import { getActiveLiveStreams } from '../../lib/livestream';
+import { getActiveLiveStreams, testDatabaseConnection } from '../../lib/livestream';
 import { EmptyState } from '../../components';
 
 const LiveStreamCard = ({ stream, onPress }) => {
@@ -108,15 +108,19 @@ const LiveStreams = () => {
     router.push('/go-live');
   };
 
+ 
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Live Streams</Text>
-        <TouchableOpacity style={styles.goLiveButton} onPress={handleGoLive}>
-          <Text style={styles.goLiveIcon}>📹</Text>
-          <Text style={styles.goLiveText}>Go Live</Text>
-        </TouchableOpacity>
+        <View style={styles.headerButtons}>
+         
+          <TouchableOpacity style={styles.goLiveButton} onPress={handleGoLive}>
+            <Text style={styles.goLiveIcon}>📹</Text>
+            <Text style={styles.goLiveText}>Go Live</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Live Streams List */}
@@ -160,6 +164,22 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255,255,255,0.1)',
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  testButton: {
+    backgroundColor: '#4CAF50',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 15,
+  },
+  testButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
   headerTitle: {
     color: '#fff',

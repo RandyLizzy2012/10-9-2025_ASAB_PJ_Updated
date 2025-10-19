@@ -79,7 +79,6 @@ const LiveReactions = ({ streamId, isHost = false }) => {
   const { user } = useGlobalContext();
   const [showReactions, setShowReactions] = useState(false);
   const [floatingEmojis, setFloatingEmojis] = useState([]);
-  const [emojiIdCounter, setEmojiIdCounter] = useState(0);
 
   const handleReaction = async (reaction) => {
     if (!user?.$id) return;
@@ -99,8 +98,8 @@ const LiveReactions = ({ streamId, isHost = false }) => {
   };
 
   const addFloatingEmoji = (emoji) => {
-    const id = emojiIdCounter;
-    setEmojiIdCounter(prev => prev + 1);
+    // Generate unique ID using timestamp and random number
+    const id = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     
     setFloatingEmojis(prev => [...prev, { id, emoji }]);
   };

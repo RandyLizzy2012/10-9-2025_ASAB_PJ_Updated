@@ -9,9 +9,35 @@ const LiveChatPanel = ({ streamId, isHost = false }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [posting, setPosting] = useState(false);
+  const [lastCommentTime, setLastCommentTime] = useState(null);
   const flatListRef = useRef(null);
 
+  // Helper function to validate streamId
+  const isValidStreamId = (streamId) => {
+    if (!streamId || typeof streamId !== 'string') {
+      return false;
+    }
+    
+    const trimmedId = streamId.trim();
+    if (trimmedId === '' || trimmedId === 'null' || trimmedId === 'undefined') {
+      return false;
+    }
+    
+    // Check if it looks like a valid Appwrite document ID (16-24 characters, alphanumeric)
+    if (trimmedId.length < 16 || trimmedId.length > 24 || !/^[a-zA-Z0-9]+$/.test(trimmedId)) {
+      return false;
+    }
+    
+    return true;
+  };
+
   useEffect(() => {
+    // Validate streamId before proceeding
+    if (!isValidStreamId(streamId)) {
+      console.error('Invalid streamId provided to LiveChatPanel:', streamId);
+      return;
+    }
+
     let unsubscribe;
 
     // Load initial comments
@@ -19,6 +45,10 @@ const LiveChatPanel = ({ streamId, isHost = false }) => {
       try {
         const initialComments = await getLiveComments(streamId);
         setComments(initialComments);
+        // Set the timestamp of the most recent comment
+        if (initialComments.length > 0) {
+          setLastCommentTime(initialComments[initialComments.length - 1].$createdAt);
+        }
       } catch (error) {
         console.error('Error loading comments:', error);
       }
@@ -26,11 +56,19 @@ const LiveChatPanel = ({ streamId, isHost = false }) => {
 
     loadComments();
 
-    // Subscribe to new comments
+    // Subscribe to new comments using polling
     unsubscribe = subscribeLiveComments(streamId, (response) => {
       if (response.events && response.events.includes('databases.*.collections.*.documents.*.create')) {
         const newComment = response.payload;
-        setComments(prev => [...prev, newComment]);
+        
+        // Only add if it's a new comment (not already in the list)
+        setComments(prev => {
+          const exists = prev.some(comment => comment.$id === newComment.$id);
+          if (!exists) {
+            return [...prev, newComment];
+          }
+          return prev;
+        });
         
         // Auto-scroll to bottom
         setTimeout(() => {

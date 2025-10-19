@@ -116,12 +116,7 @@ const Profile = () => {
   }, [user?.$id]);
   
   // Debug: Log bookmarks hook data
-  console.log('Bookmarks hook data:', {
-    bookmarks,
-    bookmarksLoading,
-    bookmarksError,
-    userId: user?.$id
-  });
+  
 
   // Refresh bookmarks when screen comes into focus (with debounce)
   const [lastRefreshTime, setLastRefreshTime] = useState(0);
@@ -772,13 +767,27 @@ const Profile = () => {
           </View>
 
           {/* Action Buttons */}
-          <View className="flex-row space-x-4">
+          <View className="flex-row space-x-4 mb-4">
             <TouchableOpacity 
               onPress={() => router.push('/donation')}
-              className="bg-green-500 px-6 py-3 rounded-lg flex-row items-center"
+              className="bg-green-500 px-4 py-3 rounded-lg flex-row items-center"
             >
               <Text className="text-white font-bold mr-2">💰</Text>
-              <Text className="text-white font-bold">Support Me</Text>
+              <Text className="text-white font-bold text-sm">Support</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => router.push('/go-live')}
+              className="bg-red-500 px-4 py-3 rounded-lg flex-row items-center"
+            >
+              <Text className="text-white font-bold mr-2">📹</Text>
+              <Text className="text-white font-bold text-sm">Go Live</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => router.push('/live-streams')}
+              className="bg-purple-500 px-4 py-3 rounded-lg flex-row items-center"
+            >
+              <Text className="text-white font-bold mr-2">📺</Text>
+              <Text className="text-white font-bold text-sm">Live</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -854,13 +863,7 @@ const Profile = () => {
          {activeSection === 'bookmarks' && (
            <View className="px-4 mb-8">
              <Text className="text-white text-lg font-semibold mb-4">Your Bookmarks</Text>
-             {/* Debug: Log bookmarks data */}
-             {console.log('Bookmarks data in profile:', {
-               bookmarks: bookmarks,
-               bookmarksLength: bookmarks?.length,
-               bookmarksType: typeof bookmarks,
-               activeSection: activeSection
-             })}
+            
                            {bookmarksLoading || isRefreshingBookmarks ? (
                 <View className="items-center py-8">
                   <Text className="text-gray-400 text-center">

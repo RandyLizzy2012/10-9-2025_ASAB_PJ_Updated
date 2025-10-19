@@ -805,10 +805,7 @@ const Home = () => {
   const renderTrendingItem = ({ item, index }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     
-    // Debug logging for each trending item
-    if (__DEV__) {
-     
-    }
+   
     
     return (
     <TouchableOpacity 
@@ -955,24 +952,6 @@ const Home = () => {
                     </Text>
                   </View>
 
-                  {/* Go Live Button */}
-                  <TouchableOpacity
-                    onPress={() => router.push('/go-live')}
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      backgroundColor: '#ff4757',
-                      paddingHorizontal: 15,
-                      paddingVertical: 10,
-                      borderRadius: 20,
-                      marginTop: 10,
-                    }}
-                  >
-                    <Text style={{ fontSize: 16, marginRight: 5 }}>📹</Text>
-                    <Text style={{ color: '#fff', fontSize: 14, fontWeight: 'bold' }}>
-                      Go Live
-                    </Text>
-                  </TouchableOpacity>
                 </View>
               </View>
 
