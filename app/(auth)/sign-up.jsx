@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { images } from "../../constants";
 import { createUser, signInWithGoogle } from "../../lib/appwrite";
@@ -57,29 +58,35 @@ const SignUp = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
-      <ScrollView>
-        <View
-          className="w-full flex justify-center h-full px-4 my-6"
-          style={{
-            minHeight: Dimensions.get("window").height - 100,
-          }}
-        >
+    <LinearGradient
+      colors={['#032727', '#000']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+      className="h-full"
+    >
+      <SafeAreaView className="h-full">
+        {/* Background Logo */}
+        <View className="absolute inset-0 justify-center items-center opacity-10">
           <Image
             source={images.logo}
             resizeMode="contain"
-            className="w-[115px] h-[34px]"
+            className="w-[370px] h-[450px]"
           />
+        </View>
+        
+        <ScrollView>
+          <View className="w-full justify-end min-h-[90vh] px-4 py-6">
 
-          <Text className="text-2xl font-semibold text-white mt-10 font-psemibold">
-            Sign Up to Aora
-          </Text>
+            <Text className="text-2xl font-bold text-white font-psemibold mb-8">
+              Sign up
+            </Text>
 
           <FormField
             title="Username"
             value={form.username}
             handleChangeText={(e) => setForm({ ...form, username: e })}
-            otherStyles="mt-10"
+            placeholder="Your unique username"
+            otherStyles="mt-6"
           />
 
           <FormField
@@ -104,19 +111,8 @@ const SignUp = () => {
             isLoading={isSubmitting}
           />
 
-          <View className="flex items-center mt-4">
-            <Text className="text-gray-300 text-sm mb-2">or</Text>
-            <GoogleSignInButton
-              onPress={handleGoogleSignIn}
-              isLoading={isGoogleSubmitting}
-              containerStyles="w-full"
-            />
-          </View>
-
-          <View className="flex justify-center pt-5 flex-row gap-2">
-            <Text className="text-lg text-gray-100 font-pregular">
-              Have an account already?
-            </Text>
+          <View className="flex justify-center pt-5 items-center">
+            <Text className="text-gray-300">Already have an account? </Text>
             <Link
               href="/sign-in"
               className="text-lg font-psemibold text-secondary"
@@ -124,9 +120,13 @@ const SignUp = () => {
               Login
             </Link>
           </View>
+          
+          {/* White bottom indicator line */}
+          <View />
         </View>
       </ScrollView>
     </SafeAreaView>
+    </LinearGradient>
   );
 };
 

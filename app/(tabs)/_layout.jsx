@@ -66,7 +66,7 @@ const TabLayout = () => {
           tabBarShowLabel: false,
           tabBarStyle: {
             backgroundColor: "#161622",
-            height: 84,
+            height: 94,
             borderTopWidth: 0,
           },
           tabBarItemStyle: {

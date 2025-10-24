@@ -6,6 +6,7 @@ import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import { Query } from 'react-native-appwrite';
 import { Video, ResizeMode } from "expo-av";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { icons } from "../../../constants";
 import useAppwrite from "../../../lib/useAppwrite";
@@ -391,10 +392,17 @@ const UserProfile = () => {
             headerShown: false 
           }} 
         />
-        <SafeAreaView className="bg-primary h-full">
-          <View className="flex-1 justify-center items-center">
-            <Text className="text-white text-lg">Loading profile...</Text>
-          </View>
+        <SafeAreaView style={{ backgroundColor: '#032727', flex: 1 }}>
+          <LinearGradient
+            colors={['#032727', '#000']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={{ flex: 1 }}
+          >
+            <View className="flex-1 justify-center items-center">
+              <Text className="text-white text-lg">Loading profile...</Text>
+            </View>
+          </LinearGradient>
         </SafeAreaView>
       </>
     );
@@ -409,43 +417,50 @@ const UserProfile = () => {
             headerShown: false 
           }} 
         />
-        <SafeAreaView className="bg-primary h-full">
-          <View className="flex flex-row items-center justify-between px-4 mt-6 mb-8">
-            <TouchableOpacity onPress={handleBack}>
-              <Image
-                source={icons.leftArrow}
-                resizeMode="contain"
-                className="w-6 h-6"
-              />
-            </TouchableOpacity>
-            <Text className="text-white text-lg font-psemibold">Profile</Text>
-            <View className="w-6" />
-          </View>
-
-          <View className="flex-1 justify-center items-center px-4">
-            <View className="w-20 h-20 border border-secondary rounded-full flex justify-center items-center mb-6">
-              <Image
-                source={{ uri: profileUser?.avatar }}
-                className="w-[90%] h-[90%] rounded-full"
-                resizeMode="cover"
-              />
+        <SafeAreaView style={{ backgroundColor: '#032727', flex: 1 }}>
+          <LinearGradient
+            colors={['#032727', '#000']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={{ flex: 1 }}
+          >
+            <View className="flex flex-row items-center justify-between px-4 mt-6 mb-8">
+              <TouchableOpacity onPress={handleBack}>
+                <Image
+                  source={icons.leftArrow}
+                  resizeMode="contain"
+                  className="w-6 h-6"
+                />
+              </TouchableOpacity>
+              <Text className="text-white text-lg font-psemibold">Profile</Text>
+              <View className="w-6" />
             </View>
-            
-            <Text className="text-white text-xl font-psemibold mb-2">
-              {profileUser?.username}
-            </Text>
-            
-            <Text className="text-gray-300 text-center mb-8">
-              This profile is private. Only approved users can view this content.
-            </Text>
-            
-            <TouchableOpacity
-              onPress={requestAccess}
-              className="bg-secondary px-6 py-3 rounded-lg"
-            >
-              <Text className="text-white font-psemibold">Request Access</Text>
-            </TouchableOpacity>
-          </View>
+
+            <View className="flex-1 justify-center items-center px-4">
+              <View className="w-20 h-20 border border-secondary rounded-full flex justify-center items-center mb-6">
+                <Image
+                  source={{ uri: profileUser?.avatar }}
+                  className="w-[90%] h-[90%] rounded-full"
+                  resizeMode="cover"
+                />
+              </View>
+              
+              <Text className="text-white text-xl font-psemibold mb-2">
+                {profileUser?.username}
+              </Text>
+              
+              <Text className="text-gray-300 text-center mb-8">
+                This profile is private. Only approved users can view this content.
+              </Text>
+              
+              <TouchableOpacity
+                onPress={requestAccess}
+                className="bg-secondary px-6 py-3 rounded-lg"
+              >
+                <Text className="text-white font-psemibold">Request Access</Text>
+              </TouchableOpacity>
+            </View>
+          </LinearGradient>
         </SafeAreaView>
       </>
     );
@@ -454,138 +469,203 @@ const UserProfile = () => {
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-      <SafeAreaView className="bg-primary h-full">
-        <FlatList
-          data={posts}
-          keyExtractor={(item) => item.$id}
-          numColumns={3}
-          renderItem={({ item, index }) => (
-            <View style={{ flex: 1/3, aspectRatio: 4/5, margin: 2, backgroundColor: '#000', borderRadius: 8, overflow: 'hidden' }}>
-              <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={() => openVideoModal(item, index)}
-                style={{ width: '100%', height: '100%' }}
-              >
-                <Video
-                  ref={ref => videoRefs.current[index] = ref}
-                  source={{ uri: item.video }}
+      <SafeAreaView style={{ backgroundColor: '#032727', flex: 1 }}>
+        <LinearGradient
+          colors={['#032727', '#000']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={{ flex: 1 }}
+        >
+          <FlatList
+            data={posts}
+            keyExtractor={(item) => item.$id}
+            numColumns={3}
+            renderItem={({ item, index }) => (
+              <View style={{ flex: 1/3, aspectRatio: 4/5, margin: 2, backgroundColor: '#000', borderRadius: 8, overflow: 'hidden' }}>
+                <TouchableOpacity
+                  activeOpacity={0.9}
+                  onPress={() => openVideoModal(item, index)}
                   style={{ width: '100%', height: '100%' }}
-                  resizeMode={ResizeMode.COVER}
-                  isMuted
-                  shouldPlay={false}
-                  useNativeControls={false}
-                  posterSource={item.thumbnail ? { uri: item.thumbnail } : undefined}
-                />
-              </TouchableOpacity>
-            </View>
-          )}
-          ListEmptyComponent={() => (
-            <EmptyState
-              title="No Videos Found"
-              subtitle="No videos found for this profile"
-            />
-          )}
-          ListHeaderComponent={() => (
-            <View style={{ alignItems: 'center', marginTop: 30, marginBottom: 16 }}>
-              {/* Profile Picture */}
-              <View className="w-20 h-20 border border-secondary items-center justify-center mb-4 rounded-lg">
-                <Image
-                  source={{ uri: profileUser?.avatar }}
-                  className="w-[90%] h-[90%]"
-                  resizeMode="cover"
-                />
-              </View>
-              {/* Username and handle */}
-              <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 22 }}>{profileUser?.username}</Text>
-              <Text style={{ color: '#aaa', fontSize: 15, marginBottom: 8 }}>@{profileUser?.username}</Text>
-              {/* Stats Row */}
-              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 12 }}>
-                <View style={{ alignItems: 'center', marginHorizontal: 18 }}>
-                  <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17 }}>{profileUser?.following?.length || 0}</Text>
-                  <Text style={{ color: '#aaa', fontSize: 13 }}>Following</Text>
-                </View>
-                <View style={{ alignItems: 'center', marginHorizontal: 18 }}>
-                  <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17 }}>{followersCount}</Text>
-                  <Text style={{ color: '#aaa', fontSize: 13 }}>Followers</Text>
-                </View>
-                <View style={{ alignItems: 'center', marginHorizontal: 18 }}>
-                  <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17 }}>{likesCount}</Text>
-                  <Text style={{ color: '#aaa', fontSize: 13 }}>Likes</Text>
-                </View>
-              </View>
-              {/* Buttons Row */}
-              {currentUser.$id !== id && (
-                <View style={{ marginBottom: 10 }}>
-                  <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 8 }}>
-                    <TouchableOpacity
-                      onPress={handleFollowToggle}
-                      style={{ backgroundColor: isFollowing ? '#444' : '#ff2d55', borderRadius: 8, paddingHorizontal: 32, paddingVertical: 10, marginHorizontal: 6 }}
-                    >
-                      <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>{isFollowing ? 'Unfollow' : 'Follow'}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={handleMessage}
-                      style={{ backgroundColor: '#222', borderRadius: 8, paddingHorizontal: 32, paddingVertical: 10, marginHorizontal: 6 }}
-                    >
-                      <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Message</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={{ backgroundColor: '#222', borderRadius: 8, paddingHorizontal: 16, paddingVertical: 10, marginHorizontal: 6 }}
-                      onPress={() => {
-                        Alert.alert(
-                          "Profile Options",
-                          "What would you like to do?",
-                          [
-                            {
-                              text: "Report Profile",
-                              onPress: () => {
-                                Alert.alert("Report", "Profile reported successfully!");
-                              },
-                              style: "destructive",
-                            },
-                            {
-                              text: "Block User",
-                              onPress: () => {
-                                Alert.alert("Block", "User blocked successfully!");
-                              },
-                              style: "destructive",
-                            },
-                            {
-                              text: "Cancel",
-                              style: "cancel",
-                            },
-                          ]
-                        );
-                      }}
-                    >
-                      <Image source={icons.menu} style={{ width: 22, height: 22, tintColor: '#fff' }} resizeMode="contain" />
-                    </TouchableOpacity>
-                  </View>
-                  {/* Donation Button */}
-                  <View style={{ alignItems: 'center' }}>
-                    <TouchableOpacity
-                      onPress={() => router.push('/donation')}
-                      style={{ backgroundColor: '#22c55e', borderRadius: 8, paddingHorizontal: 24, paddingVertical: 8, flexDirection: 'row', alignItems: 'center' }}
-                    >
-                      <Text style={{ color: '#fff', fontWeight: 'bold', marginRight: 6 }}>💰</Text>
-                      <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Support Creator</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )}
-              {/* Bio and Link */}
-              {/* {profileUser?.bio && (
-                <Text style={{ color: '#fff', fontSize: 15, textAlign: 'center', marginBottom: 6 }}>{profileUser.bio}</Text>
-              )} */}
-              {/* {profileUser?.link && (
-                <TouchableOpacity onPress={() => Linking.openURL(profileUser.link)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 6 }}>
-                  <Image source={icons.link} style={{ width: 16, height: 16, marginRight: 4, tintColor: '#3ec6ff' }} />
-                  <Text style={{ color: '#3ec6ff', fontSize: 15 }}>{profileUser.link}</Text>
+                >
+                  <Video
+                    ref={ref => videoRefs.current[index] = ref}
+                    source={{ uri: item.video }}
+                    style={{ width: '100%', height: '100%' }}
+                    resizeMode={ResizeMode.COVER}
+                    isMuted
+                    shouldPlay={false}
+                    useNativeControls={false}
+                    posterSource={item.thumbnail ? { uri: item.thumbnail } : undefined}
+                  />
                 </TouchableOpacity>
-              )} */}
-            </View>
-          )}
-        />
+              </View>
+            )}
+            ListEmptyComponent={() => (
+              <EmptyState
+                title="No Videos Found"
+                subtitle="No videos found for this profile"
+              />
+            )}
+            ListHeaderComponent={() => (
+              <View style={{ alignItems: 'center', marginTop: 30, marginBottom: 16 }}>
+                {/* Profile Picture */}
+                <View className="w-20 h-20 border border-secondary items-center justify-center mb-4 rounded-lg">
+                  <Image
+                    source={{ uri: profileUser?.avatar }}
+                    className="w-[90%] h-[90%]"
+                    resizeMode="cover"
+                  />
+                </View>
+                {/* Username and handle */}
+                <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 22 }}>{profileUser?.username}</Text>
+                <Text style={{ color: '#aaa', fontSize: 15, marginBottom: 8 }}>@{profileUser?.username}</Text>
+                {/* Stats Row */}
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 12 }}>
+                  <View style={{ alignItems: 'center', marginHorizontal: 18 }}>
+                    <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17 }}>{profileUser?.following?.length || 0}</Text>
+                    <Text style={{ color: '#aaa', fontSize: 13 }}>Following</Text>
+                  </View>
+                  <View style={{ alignItems: 'center', marginHorizontal: 18 }}>
+                    <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17 }}>{followersCount}</Text>
+                    <Text style={{ color: '#aaa', fontSize: 13 }}>Followers</Text>
+                  </View>
+                  <View style={{ alignItems: 'center', marginHorizontal: 18 }}>
+                    <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 17 }}>{likesCount}</Text>
+                    <Text style={{ color: '#aaa', fontSize: 13 }}>Likes</Text>
+                  </View>
+                </View>
+                {/* Buttons Row */}
+                {currentUser.$id !== id && (
+                  <View style={{ marginBottom: 10 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 8 }}>
+                      <TouchableOpacity
+                        onPress={handleFollowToggle}
+                        style={{
+                          borderRadius: 8,
+                          shadowColor: '#32CD32',
+                          shadowOffset: { width: 0, height: 2 },
+                          shadowOpacity: 0.3,
+                          shadowRadius: 4,
+                          elevation: 3,
+                          marginHorizontal: 6
+                        }}
+                      >
+                        <LinearGradient
+                          colors={isFollowing ? ['#444', '#333'] : ['#32CD32', '#228B22']}
+                          start={{ x: 0, y: 0 }}
+                          end={{ x: 1, y: 0 }}
+                          style={{
+                            paddingHorizontal: 32,
+                            paddingVertical: 10,
+                            borderRadius: 8,
+                          }}
+                        >
+                          <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>{isFollowing ? 'Unfollow' : 'Follow'}</Text>
+                        </LinearGradient>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={handleMessage}
+                        style={{
+                          borderRadius: 8,
+                          shadowColor: '#8A2BE2',
+                          shadowOffset: { width: 0, height: 2 },
+                          shadowOpacity: 0.3,
+                          shadowRadius: 4,
+                          elevation: 3,
+                          marginHorizontal: 6
+                        }}
+                      >
+                        <LinearGradient
+                          colors={['#8A2BE2', '#4B0082']}
+                          start={{ x: 0, y: 0 }}
+                          end={{ x: 1, y: 0 }}
+                          style={{
+                            paddingHorizontal: 32,
+                            paddingVertical: 10,
+                            borderRadius: 8,
+                          }}
+                        >
+                          <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Message</Text>
+                        </LinearGradient>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{ backgroundColor: '#222', borderRadius: 8, paddingHorizontal: 16, paddingVertical: 10, marginHorizontal: 6 }}
+                        onPress={() => {
+                          Alert.alert(
+                            "Profile Options",
+                            "What would you like to do?",
+                            [
+                              {
+                                text: "Report Profile",
+                                onPress: () => {
+                                  Alert.alert("Report", "Profile reported successfully!");
+                                },
+                                style: "destructive",
+                              },
+                              {
+                                text: "Block User",
+                                onPress: () => {
+                                  Alert.alert("Block", "User blocked successfully!");
+                                },
+                                style: "destructive",
+                              },
+                              {
+                                text: "Cancel",
+                                style: "cancel",
+                              },
+                            ]
+                          );
+                        }}
+                      >
+                        <Image source={icons.menu} style={{ width: 22, height: 22, tintColor: '#fff' }} resizeMode="contain" />
+                      </TouchableOpacity>
+                    </View>
+                    {/* Support Creator Button */}
+                    <View style={{ alignItems: 'center' }}>
+                      <TouchableOpacity
+                        onPress={() => router.push('/donation')}
+                        style={{
+                          borderRadius: 8,
+                          shadowColor: '#32CD32',
+                          shadowOffset: { width: 0, height: 2 },
+                          shadowOpacity: 0.3,
+                          shadowRadius: 4,
+                          elevation: 3,
+                        }}
+                      >
+                        <LinearGradient
+                          colors={['#32CD32', '#228B22']}
+                          start={{ x: 0, y: 0 }}
+                          end={{ x: 1, y: 0 }}
+                          style={{
+                            paddingHorizontal: 24,
+                            paddingVertical: 8,
+                            borderRadius: 8,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Text style={{ color: '#fff', fontWeight: 'bold', marginRight: 6 }}>💰</Text>
+                          <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Support Creator</Text>
+                        </LinearGradient>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
+                {/* Bio and Link */}
+                {/* {profileUser?.bio && (
+                  <Text style={{ color: '#fff', fontSize: 15, textAlign: 'center', marginBottom: 6 }}>{profileUser.bio}</Text>
+                )} */}
+                {/* {profileUser?.link && (
+                  <TouchableOpacity onPress={() => Linking.openURL(profileUser.link)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 6 }}>
+                    <Image source={icons.link} style={{ width: 16, height: 16, marginRight: 4, tintColor: '#3ec6ff' }} />
+                    <Text style={{ color: '#3ec6ff', fontSize: 15 }}>{profileUser.link}</Text>
+                  </TouchableOpacity>
+                )} */}
+              </View>
+            )}
+          />
+        </LinearGradient>
                  {/* Full Screen Video Modal */}
                    <Modal
             visible={modalVisible}

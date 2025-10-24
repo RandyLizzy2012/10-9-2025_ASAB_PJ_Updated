@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Video, ResizeMode } from "expo-av";
+import { LinearGradient } from 'expo-linear-gradient';
 import { images } from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
@@ -46,16 +47,24 @@ const SignIn = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
-      <ScrollView>
-        <View className="w-full justify-center min-h-[85vh] px-4 my-6">
-          <View className="flex-row justify-center items-center mb-8">
-            <Image
-              source={images.logo}
-              resizeMode="contain"
-              className="w-[200px] h-[100px]"
-            />
-          </View>
+    <LinearGradient
+      colors={['#032727', '#000']}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+      style={{ flex: 1 }}
+    >
+      <SafeAreaView className="h-full">
+        {/* Background Logo */}
+        <View className="absolute inset-0 justify-center items-center opacity-10">
+          <Image
+            source={images.logo}
+            resizeMode="contain"
+            className="w-[370px] h-[450px]"
+          />
+        </View>
+        
+        <ScrollView>
+        <View className="w-full justify-end min-h-[90vh] px-4 py-6">
 
           <View className="space-y-4">
             <Text className="text-2xl font-bold text-white text-center">
@@ -97,8 +106,9 @@ const SignIn = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 

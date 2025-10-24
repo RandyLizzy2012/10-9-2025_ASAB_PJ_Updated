@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, FlatList, TouchableOpacity, Image, TextInput } from "react-native";
 import { Query } from 'react-native-appwrite';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { icons } from "../../constants";
 import { databases, appwriteConfig, getCurrentUser } from "../../lib/appwrite";
@@ -78,8 +79,14 @@ const Friends = () => {
   );
 
   return (
-    <SafeAreaView className="bg-primary h-full">
-      <View className="px-4 py-6">
+    <SafeAreaView style={{ backgroundColor: '#032727', flex: 1 }}>
+      <LinearGradient
+        colors={['#032727', '#000']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        style={{ flex: 1 }}
+      >
+        <View className="px-4 py-6">
         <Text className="text-2xl text-white font-psemibold mb-6">Discover Users</Text>
         
         {/* Search Input */}
@@ -117,7 +124,8 @@ const Friends = () => {
             )}
           />
         )}
-      </View>
+        </View>
+      </LinearGradient>
     </SafeAreaView>
   );
 };

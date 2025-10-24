@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { icons } from "../../constants";
 import { createVideoPost } from "../../lib/appwrite";
@@ -142,8 +143,14 @@ const Create = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
-      <ScrollView className="px-4 my-6">
+    <SafeAreaView style={{ backgroundColor: '#032727', flex: 1 }}>
+      <LinearGradient
+        colors={['#032727', '#000']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        style={{ flex: 1 }}
+      >
+        <ScrollView className="px-4 my-6">
         <Text className="text-2xl text-white font-psemibold">Upload Video</Text>
 
         <FormField
@@ -226,7 +233,8 @@ const Create = () => {
           containerStyles="mt-7"
           isLoading={uploading}
         />
-      </ScrollView>
+        </ScrollView>
+      </LinearGradient>
     </SafeAreaView>
   );
 };

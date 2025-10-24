@@ -6,6 +6,7 @@ import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as ImagePicker from "expo-image-picker";
 import { Video, ResizeMode } from "expo-av";
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { icons } from "../../constants";
 import useAppwrite from "../../lib/useAppwrite";
@@ -699,28 +700,35 @@ const Profile = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
-      <ScrollView className="flex-1">
-        {/* Header with logout and menu */}
-        <View className="flex-row justify-between items-center px-4 pt-4 pb-6">
-          <TouchableOpacity onPress={logout}>
-            <Image
-              source={icons.logout}
-              resizeMode="contain"
-              className="w-6 h-6"
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={openEditModal}>
-            <Image
-              source={icons.menu}
-              resizeMode="contain"
-              className="w-6 h-6"
-            />
-          </TouchableOpacity>
-        </View>
+    <SafeAreaView style={{ backgroundColor: '#032727', flex: 1 }}>
+      <ScrollView style={{ flex: 1, backgroundColor: '#000' }}>
+        {/* Profile Section with Gradient Background */}
+        <LinearGradient
+          colors={['#032727', '#000']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={{ flex: 1 }}
+        >
+          {/* Header with logout and menu */}
+          <View className="flex-row justify-between items-center px-4 pt-4 pb-6">
+            <TouchableOpacity onPress={logout}>
+              <Image
+                source={icons.logout}
+                resizeMode="contain"
+                className="w-6 h-6"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={openEditModal}>
+              <Image
+                source={icons.menu}
+                resizeMode="contain"
+                className="w-6 h-6"
+              />
+            </TouchableOpacity>
+          </View>
 
-       {/* Profile Section */}
-        <View className="items-center px-4 mb-8 mt-6">
+         {/* Profile Section */}
+          <View className="items-center px-4 mb-8 mt-6">
           {/* Profile Picture */}
           <View className="w-20 h-20 border border-secondary items-center justify-center mb-4 rounded-lg">
             {user?.avatar ? (
@@ -767,35 +775,95 @@ const Profile = () => {
           </View>
 
           {/* Action Buttons */}
-          <View className="flex-row space-x-4 mb-4">
+          <View style={{ flexDirection: 'row', gap: 16, marginBottom: 16 }}>
             <TouchableOpacity 
               onPress={() => router.push('/donation')}
-              className="bg-green-500 px-4 py-3 rounded-lg flex-row items-center"
+              style={{
+                borderRadius: 8,
+                shadowColor: '#32CD32',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.3,
+                shadowRadius: 4,
+                elevation: 3,
+              }}
             >
-              <Text className="text-white font-bold mr-2">💰</Text>
-              <Text className="text-white font-bold text-sm">Support</Text>
+              <LinearGradient
+                colors={['#32CD32', '#228B22']} // Lime green to emerald green
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={{
+                  paddingHorizontal: 16,
+                  paddingVertical: 12,
+                  borderRadius: 8,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
+                
+                <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Support</Text>
+              </LinearGradient>
             </TouchableOpacity>
             <TouchableOpacity 
               onPress={() => router.push('/go-live')}
-              className="bg-red-500 px-4 py-3 rounded-lg flex-row items-center"
+              style={{
+                borderRadius: 8,
+                shadowColor: '#FF0000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.3,
+                shadowRadius: 4,
+                elevation: 3,
+              }}
             >
-              <Text className="text-white font-bold mr-2">📹</Text>
-              <Text className="text-white font-bold text-sm">Go Live</Text>
+              <LinearGradient
+                colors={['#FF0000', '#8B0000']} // Bright red to maroon red
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={{
+                  paddingHorizontal: 16,
+                  paddingVertical: 12,
+                  borderRadius: 8,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
+                
+                <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Go Live</Text>
+              </LinearGradient>
             </TouchableOpacity>
             <TouchableOpacity 
               onPress={() => router.push('/live-streams')}
-              className="bg-purple-500 px-4 py-3 rounded-lg flex-row items-center"
+              style={{
+                borderRadius: 8,
+                shadowColor: '#8A2BE2',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.3,
+                shadowRadius: 4,
+                elevation: 3,
+              }}
             >
-              <Text className="text-white font-bold mr-2">📺</Text>
-              <Text className="text-white font-bold text-sm">Live</Text>
+              <LinearGradient
+                colors={['#8A2BE2', '#4B0082']} // Bright purple to deep indigo
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={{
+                  paddingHorizontal: 16,
+                  paddingVertical: 12,
+                  borderRadius: 8,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
+                
+                <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Live</Text>
+              </LinearGradient>
             </TouchableOpacity>
           </View>
         </View>
 
-                 {/* Section Tabs */}
-         <View className="px-4 mb-4">
-           <View className="flex-row bg-gray-800 rounded-lg p-1">
-                           <TouchableOpacity 
+          {/* Section Tabs */}
+          <View className="px-4 mb-4">
+            <View style={{ backgroundColor: '#04302F' }} className="flex-row rounded-lg p-1">
+              <TouchableOpacity 
                 className={`flex-1 py-2 px-4 rounded-lg ${activeSection === 'videos' ? 'bg-primary' : 'bg-transparent'}`}
                 onPress={() => handleSectionChange('videos')}
               >
@@ -803,6 +871,7 @@ const Profile = () => {
                   Videos
                 </Text>
               </TouchableOpacity>
+ 
               <TouchableOpacity 
                 className={`flex-1 py-2 px-4 rounded-lg ${activeSection === 'bookmarks' ? 'bg-primary' : 'bg-transparent'}`}
                 onPress={() => handleSectionChange('bookmarks')}
@@ -811,10 +880,13 @@ const Profile = () => {
                   Bookmarks
                 </Text>
               </TouchableOpacity>
-           </View>
-         </View>
+            </View>
+          </View>
+        </LinearGradient>
 
-                   {/* Videos Section */}
+        {/* Content Sections with Black Background */}
+        <View style={{ backgroundColor: '#000', flex: 1 }}>
+          {/* Videos Section */}
           {activeSection === 'videos' && (
             <View className="px-4 mb-8">
               <Text className="text-white text-lg font-semibold mb-4">Your Videos</Text>
@@ -859,10 +931,10 @@ const Profile = () => {
             </View>
           )}
 
-         {/* Bookmarks Section */}
-         {activeSection === 'bookmarks' && (
-           <View className="px-4 mb-8">
-             <Text className="text-white text-lg font-semibold mb-4">Your Bookmarks</Text>
+          {/* Bookmarks Section */}
+          {activeSection === 'bookmarks' && (
+            <View className="px-4 mb-8">
+              <Text className="text-white text-lg font-semibold mb-4">Your Bookmarks</Text>
             
                            {bookmarksLoading || isRefreshingBookmarks ? (
                 <View className="items-center py-8">
@@ -949,17 +1021,20 @@ const Profile = () => {
                  <Text className="text-gray-500 text-sm text-center mt-2">Bookmark videos to see them here</Text>
                </View>
              )}
-           </View>
-         )}
+            </View>
+          )}
+        </View>
 
         {/* Pending Requests Section */}
         {isPrivate && pendingRequests && pendingRequests.length > 0 && (
-          <View className="mx-4 mb-8 bg-secondary px-4 py-3 rounded-lg">
+          <View style={{ backgroundColor: '#000' }}>
+            <View className="mx-4 mb-8 bg-secondary px-4 py-3 rounded-lg">
             <Text className="text-white font-semibold mb-2">🔒 Pending Access Requests ({pendingRequests.length})</Text>
             <Text className="text-gray-300 text-sm">You have pending requests to view your private profile</Text>
             <TouchableOpacity onPress={() => setEditModalVisible(true)} className="mt-2 bg-primary px-4 py-2 rounded-lg self-start">
               <Text className="text-white font-medium text-sm">Manage Requests</Text>
             </TouchableOpacity>
+            </View>
           </View>
         )}
 

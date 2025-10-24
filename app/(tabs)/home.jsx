@@ -4,6 +4,7 @@ import { FlatList, Image, RefreshControl, Text, View, TouchableOpacity, Dimensio
 import { ResizeMode, Video } from "expo-av";
 import { router, useFocusEffect } from "expo-router";
 import { GestureHandlerRootView, PanGestureHandler, State, Gesture } from "react-native-gesture-handler";
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { images, icons } from "../../constants";
 import useAppwrite from "../../lib/useAppwrite";
@@ -702,6 +703,7 @@ const Home = () => {
   const [selectedTab, setSelectedTab] = useState('forYou'); // 'forYou' or 'following'
   const [refreshing, setRefreshing] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentTrendingIndex, setCurrentTrendingIndex] = useState(0);
   const [isHomeFocused, setIsHomeFocused] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -772,6 +774,23 @@ const Home = () => {
     }, [])
   );
 
+  // Handle trending videos scroll to determine center video
+  const handleTrendingScroll = (event) => {
+    const scrollX = event.nativeEvent.contentOffset.x;
+    // Calculate item width: center video (130) + margins (16 total), side videos (110) + margins (16 total)
+    // Use average width for calculation
+    const averageItemWidth = 126; // Average of 146 (130+16) and 126 (110+16)
+    const centerIndex = Math.round(scrollX / averageItemWidth);
+    
+    // Clamp the index between 0 and the number of videos - 1
+    const maxIndex = Math.max(0, (latestPosts?.length || 1) - 1);
+    const newIndex = Math.max(0, Math.min(centerIndex, maxIndex));
+    
+    if (newIndex !== currentTrendingIndex && newIndex < (latestPosts?.length || 0)) {
+      setCurrentTrendingIndex(newIndex);
+    }
+  };
+
   const handleViewableItemsChanged = useCallback(({ viewableItems }) => {
     if (viewableItems.length > 0) {
       const newIndex = viewableItems[0].index;
@@ -805,15 +824,29 @@ const Home = () => {
   const renderTrendingItem = ({ item, index }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     
-   
+    // Determine if this is the center video based on currentTrendingIndex
+    const isCenterVideo = index === currentTrendingIndex;
     
+    // Get video dimensions - center video is larger, side videos are smaller
+    // Making videos taller and narrower to match the second image
+    const getVideoWidth = () => {
+      return isCenterVideo ? 130 : 110; // Center video wider but narrower than before
+    };
+    
+    const getVideoHeight = () => {
+      return isCenterVideo ? 260 : 220; // Center video taller to match aspect ratio
+    };
+    
+    // Minimal spacing between videos
+    const getMarginHorizontal = () => {
+      return 8; // Very small margins for minimal spacing
+    };
     return (
     <TouchableOpacity 
       key={item.$id}
       style={{ 
-        marginRight: 20, 
-        alignItems: 'center',
-        width: 200
+        marginHorizontal: getMarginHorizontal(),
+        alignItems: 'center'
       }}
       onPress={() => {
         // Toggle play/pause for the trending video
@@ -822,9 +855,9 @@ const Home = () => {
       }}
     >
       <View style={{ 
-        width: 200, 
-        height: 280, 
-        borderRadius: 33, 
+        width: getVideoWidth(), 
+        height: getVideoHeight(), 
+        borderRadius: 16, 
         marginTop: 12, 
         backgroundColor: 'rgba(255,255,255,0.1)',
         overflow: 'hidden',
@@ -868,7 +901,7 @@ const Home = () => {
           <View style={{ 
             width: '100%', 
             height: '100%', 
-            backgroundColor: '#333', 
+            backgroundColor: 'rgba(0,0,0,0.3)', 
             justifyContent: 'center', 
             alignItems: 'center' 
           }}>
@@ -885,9 +918,15 @@ const Home = () => {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#111624ff' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#032727' }}>
+        <LinearGradient
+          colors={['#032727', '#000']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={{ flex: 1 }}
+        >
         {/* Combined Scrollable Content with Trending and Videos */}
-          <FlatList
+        <FlatList
             data={displayPosts}
             keyExtractor={(item) => item.$id}
             renderItem={renderVideoCard}
@@ -918,40 +957,54 @@ const Home = () => {
           ListHeaderComponent={() => (
             // Header Section with User Name and Search
             <View style={{ 
-              backgroundColor: '#040b25ff', 
               paddingVertical: 20,
               borderBottomWidth: 1,
               borderBottomColor: 'rgba(255,255,255,0.1)'
             }}>
-              {/* Welcome Back and Username */}
+              {/* Header with Logo and ASAB Badge */}
               <View style={{ paddingHorizontal: 20, marginBottom: 20 }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ 
-                      color: '#ccc', 
-                      fontSize: 14, 
-                      marginBottom: 5 
-                    }}>
-
-                     <View className="mt-6">
-                    <Image
-                      source={images.ASAB4}
-                      className="w-22 h-24
-                       justify-center right-10"
-                      />
-                  </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                  {/* Left Logo */}
+                  <Image
+                    source={images.amedia}
+                    style={{ width: 60, height: 60 }}
+                    resizeMode="contain"
+                  />
                   
-                      Welcome Back
-                    </Text>
-                    <Text style={{ 
-                      color: '#fff', 
-                      fontSize: 24, 
-                      fontWeight: 'bold' 
-                    }}>
-                      {user?.username || 'jsmastery'}
-                    </Text>
+                  {/* Right ASAB VIDEOS Badge with Beige Back Background */}
+                  <View style={{
+                    width: 120,
+                    height: 120,
+                    borderRadius: 50,
+                    overflow: 'hidden',
+                  }}>
+                    <Image
+                      source={require('../../assets/images/Beige Back.png')}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                      resizeMode="cover"
+                    />
                   </View>
-
+                </View>
+                
+                {/* Welcome Back and Username */}
+                <View>
+                  <Text style={{ 
+                    color: '#ccc', 
+                    fontSize: 14, 
+                    marginBottom: 5 
+                  }}>
+                    Welcome Back
+                  </Text>
+                  <Text style={{ 
+                    color: '#fff', 
+                    fontSize: 24, 
+                    fontWeight: 'bold' 
+                  }}>
+                    {user?.username || 'jsmastery'}
+                  </Text>
                 </View>
               </View>
 
@@ -1023,7 +1076,6 @@ const Home = () => {
               {/* Trending Videos Section */}
               {latestPosts && latestPosts.length > 0 ? (
                 <View style={{ 
-                  backgroundColor: '#0f152bff', 
                   paddingVertical: 20,
                   borderBottomWidth: 1,
                   borderBottomColor: 'rgba(255,255,255,0.1)',
@@ -1039,13 +1091,33 @@ const Home = () => {
                     Trending Videos
               </Text>
                   
-                  <ScrollView 
-                    horizontal 
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ paddingHorizontal: 20 }}
-                  >
-                    {latestPosts.slice(0, 5).map((item, index) => renderTrendingItem({ item, index }))}
-                  </ScrollView>
+                  <View style={{ 
+                    overflow: 'hidden',
+                    marginHorizontal: -20,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}>
+                    <ScrollView 
+                      horizontal 
+                      showsHorizontalScrollIndicator={false}
+                      contentContainerStyle={{ 
+                        paddingHorizontal: 40,
+                        paddingLeft: 60,
+                        paddingRight: 60,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                      decelerationRate="fast"
+                      bounces={false}
+                      centerContent={true}
+                      snapToInterval={126}
+                      snapToAlignment="center"
+                      onMomentumScrollEnd={handleTrendingScroll}
+                      onScrollEndDrag={handleTrendingScroll}
+                    >
+                      {latestPosts.slice(0, 5).map((item, index) => renderTrendingItem({ item, index }))}
+                    </ScrollView>
+                  </View>
                   
                   {/* Carousel Indicators */}
                   <View style={{ 
@@ -1059,7 +1131,7 @@ const Home = () => {
                           width: 8, 
                           height: 8, 
                           borderRadius: 4, 
-                          backgroundColor: index === 1 ? '#FFD700' : 'rgba(255,255,255,0.3)', 
+                          backgroundColor: index === currentTrendingIndex ? '#FFD700' : 'rgba(255,255,255,0.3)', 
                           marginHorizontal: 4 
                         }} 
                       />
@@ -1069,10 +1141,10 @@ const Home = () => {
                                                       </View>
                ) : null}
 
-
-          </View>
+            </View>
         )}
         />
+        </LinearGradient>
       </SafeAreaView>
     </GestureHandlerRootView>
   );

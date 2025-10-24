@@ -27,7 +27,7 @@ const AuthLayout = () => {
       </Stack>
 
       <Loader isLoading={loading} />
-      <StatusBar backgroundColor="#161622" style="light" />
+      <StatusBar backgroundColor="#2D1B0A" style="light" />
     </>
   );
 };
